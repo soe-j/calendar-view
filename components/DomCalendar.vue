@@ -4,33 +4,34 @@
       <div class="day">
         {{ days[0].getFullYear() }}/{{ days[0].getMonth() + 1 }}
       </div>
-      <div class="day" v-for="day in days" :key="day.getTime()">
+      <div v-for="day in days" :key="day.getTime()" class="day">
         {{ day.getDate() }}
       </div>
     </div>
     <div class="label-calendars">
       <div
-        class="label-calendar"
         v-for="labelCalendar in labelCalendars"
         :key="labelCalendar.label.id"
+        class="label-calendar"
       >
         <div class="label">{{ labelCalendar.label.name }}</div>
         <div class="day-calendars">
           <div
-            class="day-calendar"
             v-for="dayCalendar in labelCalendar.dayCalendars"
             :key="dayCalendar.day.getTime()"
+            class="day-calendar"
           >
             <div
-              class="event"
               v-for="event in dayCalendar.events"
               :key="event.id"
+              class="event"
               @click="show(event)"
             >
               <div>{{ event.name }}</div>
               <div class="event__time">
                 {{ event.startTime }}-{{ event.endTime }}
               </div>
+              <button @click="update(event)">update</button>
             </div>
           </div>
         </div>
@@ -41,6 +42,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from '@nuxtjs/composition-api'
 import { Event, LabelCalendar } from '@/types/Event'
+import { updateEvent } from '@/usecases/events'
 
 export default defineComponent({
   props: {
@@ -65,6 +67,16 @@ export default defineComponent({
             `endTime: ${event.endTime}`,
           ].join('\n')
         )
+      },
+      update(ev: Event) {
+        window.event?.stopPropagation()
+
+        const newDay = new Date(ev.day)
+        newDay.setDate(ev.day.getDate() + 1)
+        const newEvent = Object.assign({}, ev, {
+          day: newDay,
+        })
+        updateEvent(newEvent)
       },
     }
   },

@@ -2,9 +2,9 @@
   <div>
     <button @click="fetch">fetch</button>
     <dom-calendar
+      v-if="labelCalendars.length"
       :label-calendars="labelCalendars"
       :days="days"
-      v-if="labelCalendars.length"
     />
   </div>
 </template>

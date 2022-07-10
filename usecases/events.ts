@@ -89,3 +89,45 @@ const getTime = () => {
 
   return [hour, minute].map((n) => `0${n.toString()}`.slice(-2)).join(':')
 }
+
+export const updateEvent = (ev: Event) => {
+  console.log(ev)
+
+  // delete
+  ev.labels.forEach((label) => {
+    const labelCalendar = labelCalendars.find((labelCalendar) => {
+      return labelCalendar.label.id === label.id
+    })
+
+    const dayCalendar = labelCalendar!.dayCalendars.find((dayCalendar) => {
+      return dayCalendar.day === ev.day
+    })
+
+    const targetEventIndex = dayCalendar!.events.findIndex((targetEvent) => {
+      return targetEvent.id === ev.id
+    })
+    if (targetEventIndex === -1) throw new Error()
+
+    console.log('targetEventIndex', targetEventIndex)
+    dayCalendar!.events.splice(targetEventIndex, 1)
+  })
+
+  // add
+  ev.labels.forEach((label) => {
+    const labelCalendar = labelCalendars.find((labelCalendar) => {
+      return labelCalendar.label.id === label.id
+    })
+
+    const dayCalendar = labelCalendar!.dayCalendars.find((dayCalendar) => {
+      return dayCalendar.day === ev.day
+    })
+
+    const targetEventIndex = dayCalendar!.events.findIndex((targetEvent) => {
+      return targetEvent.id === ev.id
+    })
+    if (targetEventIndex === -1) throw new Error()
+
+    console.log('targetEventIndex', targetEventIndex)
+    dayCalendar!.events.splice(targetEventIndex, 1)
+  })
+}
